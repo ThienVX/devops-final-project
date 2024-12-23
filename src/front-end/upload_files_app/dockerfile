@@ -1,0 +1,34 @@
+# Use the official Node.js 18 image as a base image
+FROM node:22 AS build
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# Copy package.json and package-lock.json (if available) to the working directory
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install
+
+ENV VITE_BACK_END_URL=VITE_BACK_END_URL
+
+# Copy the rest of the application code to the working directory
+COPY . .
+
+# Build the React app for production
+RUN npm run build
+
+# Use an Nginx image to serve the static files
+FROM nginx:alpine
+
+# Copy the built files from the previous stage to Nginx's default directory
+COPY --from=build /app/dist /usr/share/nginx/html
+
+# Expose port 80 to the outside world
+EXPOSE 80
+
+# Start Nginx when the container starts
+CMD ["nginx", "-g", "daemon off;"]
+
+COPY env.sh /docker-entrypoint.d/env.sh
+RUN chmod +x /docker-entrypoint.d/env.sh

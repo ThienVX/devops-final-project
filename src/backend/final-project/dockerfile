@@ -1,0 +1,21 @@
+FROM maven:3.8.5-openjdk-17 AS builder
+WORKDIR /app
+COPY pom.xml .
+COPY src ./src
+RUN mvn clean package -DskipTests
+
+ARG SPRING_PROJECT_ID
+ARG SPRING_BUCKET_ID
+ARG SPRING_DIRECTOR_NAME
+
+ENV SPRING_PROJECT_ID=SPRING_PROJECT_ID
+ENV SPRING_BUCKET_ID=SPRING_BUCKET_ID
+ENV SPRING_DIRECTOR_NAME=SPRING_DIRECTOR_NAME
+
+# Stage 2: Runtime
+FROM openjdk:17-jdk-slim
+WORKDIR /app
+COPY --from=builder /app/target/*.jar app.jar
+# Set environment variables for MySQL connection
+EXPOSE 8080
+ENTRYPOINT ["java", "-jar", "app.jar"]
