@@ -1,7 +1,7 @@
 # Function to set up Helm and Kubernetes secret
 function Setup {
     param (
-        [string]$KeyPath = "D:\Learning\DataPlatform\data-source-2\final_devops_project\gke-nth-8e96578cc812.json",  # Default value for KeyPath
+        [string]$KeyPath = "D:\Learning\DataPlatform\data-source-3\final_devops_project\gke-nth-8e96578cc812.json",  # Default value for KeyPath
         [string]$HelmChartPath = ".",  # Default value for HelmChartPath
         [string]$ReleaseName = "data-platform-hth"  # Default value for ReleaseName
     )
@@ -110,7 +110,7 @@ function Prompt-ForInput {
 }
 
 # Main script execution
-$KeyPath = Prompt-ForInput "Enter the path to the key file" "D:\Learning\DataPlatform\data-source\final_devops_project\gke-nth-8e96578cc812.json"
+$KeyPath = Prompt-ForInput "Enter the path to the key file" "D:\Learning\DataPlatform\data-source-3\final_devops_project\gke-nth-8e96578cc812.json"
 $HelmChartPath = Prompt-ForInput "Enter the path to the Helm chart" "."
 $ReleaseName = Prompt-ForInput "Enter the Helm release name" "data-platform-hth"
 $GcpServiceAccount = Prompt-ForInput "Enter the GCP service account email" "gke-admin@gke-nth.iam.gserviceaccount.com"
