@@ -8,11 +8,5 @@ dependencies:
 - name: upload-files-be
   repository: file://subcharts/upload-files-be
   version: 0.1.0
-- name: airflow
-  repository: https://airflow.apache.org
-  version: 1.15.0
-- name: postgresql
-  repository: https://charts.bitnami.com/bitnami
-  version: 16.3.4
-digest: sha256:c62e63824469c7b9aca24f73d228dcf8658d6120fc83dfec78431b08334626a1
-generated: "2024-12-24T00:17:56.269729+07:00"
+digest: sha256:1328050f464120bad0c5cffc4c48df6e155d8230f739895873b6b9e332f88777
+generated: "2024-12-24T22:48:19.1212474+07:00"

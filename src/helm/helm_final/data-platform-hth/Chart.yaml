@@ -33,10 +33,3 @@ dependencies:
   - name: upload-files-be
     version: 0.1.0
     repository: file://subcharts/upload-files-be
-  - name: airflow
-    version: 1.15.0
-    repository: https://airflow.apache.org
-  - name: postgresql
-    version: 16.3.4
-    alias: data-storage
-    repository: https://charts.bitnami.com/bitnami
