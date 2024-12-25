@@ -70,7 +70,7 @@ ingress:
     nginx.ingress.kubernetes.io/enable-cors: "true"
     nginx.ingress.kubernetes.io/proxy-body-size: "4096m"
   hosts:
-    - host: upload-file-be.34.124.182.21.nip.io
+    - host: upload-file-be.34.97.10.19.nip.io
       paths:
         - path: /
           pathType: ImplementationSpecific
@@ -135,9 +135,9 @@ affinity: {}
 port: 8080
 env:
   - name: SPRING_PROJECT_ID
-    value: valiant-hexagon-443709-r2
+    value: gke-nth-1
   - name: SPRING_BUCKET_ID
-    value: final_demo_bucket
+    value: gcp-bucket-demo-6eaa8a4f
   - name: SPRING_DIRECTOR_NAME
     value: demo
   - name: GOOGLE_APPLICATION_CREDENTIALS

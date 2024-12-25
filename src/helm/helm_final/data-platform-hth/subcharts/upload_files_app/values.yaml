@@ -69,7 +69,7 @@ ingress:
     nginx.ingress.kubernetes.io/use-regex: "true"
     nginx.ingress.kubernetes.io/enable-cors: "true"
   hosts:
-    - host: upload-file-app.34.124.182.21.nip.io
+    - host: upload-file-app.34.97.10.19.nip.io
       paths:
         - path: /
           pathType: ImplementationSpecific

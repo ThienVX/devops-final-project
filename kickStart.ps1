@@ -106,10 +106,6 @@ function replace_loadbalancer_ip {
         # Read the content of the file
         $content = Get-Content $FilePath -Raw
 
-        # Display the original content of the file
-        Write-Host "`nOriginal content of ${FilePath}:" -ForegroundColor Yellow
-        $content -split "`n" | ForEach-Object { Write-Host $_ }
-
         # Replace the placeholder with LoadBalancerIP
         $updatedContent = $content -replace "IngressLoadBalancerIP", $LoadBalancerIP
 
@@ -381,12 +377,12 @@ if ($existingPostgresql) {
 
         # Proceed with installation after uninstall
         Write-Host "Installing new PostgreSQL release..." -ForegroundColor Cyan
-        $helmInstallResult = helm install $PostgresqlReleaseName $PostgresqlRepoPath --version 16.3.4 --namespace $PostgresqlNamespace -f $PostgresqlValuesFilePath
+        $helmInstallResult = helm install $PostgresqlReleaseName $PostgresqlRepoPath --namespace $PostgresqlNamespace -f $PostgresqlValuesFilePath
 
-        if ($helmInstallResult -match "Error") {
-            Write-Host "Helm install failed: $helmInstallResult" -ForegroundColor Red
-            exit 1
-        }
+#        if ($helmInstallResult -match "Error") {
+#            Write-Host "Helm install failed: $helmInstallResult" -ForegroundColor Red
+#            exit 1
+#        }
         Write-Host "PostgreSQL release '$PostgresqlReleaseName' deployed successfully!" -ForegroundColor Green
     } else {
         Write-Host "Skipping uninstallation and installation of PostgreSQL." -ForegroundColor Yellow
@@ -395,12 +391,12 @@ if ($existingPostgresql) {
 } else {
     # Install PostgreSQL if not already installed
     Write-Host "PostgreSQL is not installed. Installing new release..." -ForegroundColor Cyan
-    $helmInstallResult = helm install $PostgresqlReleaseName $PostgresqlRepoPath --version 16.3.4 --namespace $PostgresqlNamespace -f $PostgresqlValuesFilePath
+    $helmInstallResult = helm install $PostgresqlReleaseName $PostgresqlRepoPath --namespace $PostgresqlNamespace -f $PostgresqlValuesFilePath
 
-    if ($helmInstallResult -match "Error") {
-        Write-Host "Helm install failed: $helmInstallResult" -ForegroundColor Red
-        exit 1
-    }
+#    if ($helmInstallResult -match "Error") {
+#        Write-Host "Helm install failed: $helmInstallResult" -ForegroundColor Red
+#        exit 1
+#    }
     Write-Host "PostgreSQL release '$PostgresqlReleaseName' deployed successfully!" -ForegroundColor Green
 }
 
@@ -418,8 +414,8 @@ try {
 }
 
 # Step 8
-$AirflowDomain = "http://airflow.$LoadBalancerIP.nip.io"
-Write-Host "Constructed Airflow Domain: $AirflowDomain" -ForegroundColor Green
+#$AirflowDomain = "http://airflow.$LoadBalancerIP.nip.io"
+#Write-Host "Constructed Airflow Domain: $AirflowDomain" -ForegroundColor Green
 
 # Define username and password
 $username = "admin"
@@ -434,7 +430,7 @@ $password = "admin"
 $base64AuthInfo = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes("${username}:${password}"))
 
 # Output the Base64 encoded string (for debugging)
-Write-Host "Encoded Credentials: $base64AuthInfo"
+#Write-Host "Encoded Credentials: $base64AuthInfo"
 
 
 # Set the Authorization header
@@ -480,7 +476,7 @@ $isDomainReady = $false
 #    Write-Host "Airflow domain is not ready after $maxRetries attempts. Skipping connection registration." -ForegroundColor Red
 #}
 
-Write-Host "`nSetup complete! Check '$LogFile' for detailed logs.`n" -ForegroundColor Green
+#Write-Host "`nSetup complete! Check '$LogFile' for detailed logs.`n" -ForegroundColor Green
 
 # End Logging
 Stop-Transcript
