@@ -271,6 +271,7 @@ $jupyterModifiedValuesPath = replace_loadbalancer_ip -FilePath $jupyterFileValue
 
 # Step 4: Deploy Airflow Chart
 # Check if Airflow release already exists
+helm repo add apache-airflow https://airflow.apache.org/
 kubectl create namespace $AirflowNamespace
 $existingAirflow = helm list --namespace $AirflowNamespace | Select-String -Pattern $AirflowReleaseName
 
@@ -315,6 +316,7 @@ if ($existingAirflow) {
 
 # Step 5: Deploy Jupyter Chart
 # Check if Jupyter release already exists
+helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/
 kubectl create namespace $JupyterNamespace
 $existingJupyter = helm list --namespace $JupyterNamespace | Select-String -Pattern $JupyterReleaseName
 
@@ -359,6 +361,7 @@ if ($existingJupyter) {
 
 # Step 6: Deploy Postgresql Chart
 # Check if PostgreSQL release already exists
+helm repo add bitnami https://charts.bitnami.com/bitnami
 kubectl create namespace $PostgresqlNamespace
 $existingPostgresql = helm list --namespace $PostgresqlNamespace | Select-String -Pattern $PostgresqlReleaseName
 
