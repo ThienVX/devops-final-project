@@ -76,25 +76,6 @@ defaultAirflowDigest: ~
 # Airflow version (Used to make some decisions based on Airflow Version being deployed)
 airflowVersion: "2.9.3"
 
-# airflow:
-#   connections:
-#     - conn_id: google_cloud_default
-#       conn_type: google_cloud_platform
-#       extra: |
-#         {
-#           "type": "service_account",
-#           "project_id": "gke-nth",
-#           "private_key_id": "8e96578cc812537730d02834a13c2c3b89641854",
-#           "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQC8BnEdstTXUq8j\nC2ZjFPr4Xq3KhTy+6rw+5Eqcu+njyWNlIsg8Gt3mqk8v6OHX+uIkNE88gJiwhHK2\n0hHdhyMcl4YGKoJVUJ4lb0l+MWKFkdnZuk10xyjSjTmdU3b13csZF3XcJSzYqLnG\nvuy/koPRPcxnKV+KdVOYIl374SWIn7B3haSB/kcktg3Qey/42o+AU7oDyT9glRmS\nvc9L32Ry8OasI9xGaMijJOtW102gF2vM4+OEAXDmYoPPnyn6OizFEyxHgdmGlupe\nPBDiPzkFmRCcMGGUfeKZVaDgqCUn6YBbaXaICBAJq+ec+YXBe/eoksA6IyQAplCu\nejoL+tYBAgMBAAECggEASjZUsT8jaPV2sONP/y2JvTxJZhTenBA0SrJ6jJBSyZh0\nRbfLxoVoLiHsbWGCumeImHeZCq1LFujACk6xxHkRL7jSql5e4OOX9/iLzmYZl9Sw\nYpJ4/e2ZvDkHk4QdAQAQqI+s8j4uDDnUUZCMCzT+GDlHEzSuRAz4+KQf6km8Mcb+\nfPfq2YL8HdZdNvVZ6txW0+8UQq03VFCzSFz45KrdyxOp3UOn0ufIKAG3JBVF6i1c\niVayalhltLr13PnzFUF8iADcCGQmg9PPw74T+4Dl8S1cFm5Ec2TUYHlhIZ2RxIqt\nwh9KqC5kN7Z8/S/2Fg0gJj+Xy607DtdjatxkmTb7LQKBgQD/oa5iKdHEcGIArHnT\nU9DjEL8T6MXMmnWBxYxk4xpCs1iIZjSyIddzoX2sXZl90YiAVC5cG1Y/YND4zRZv\nHm26ZcCnUripM1bsFS2f2o7v8kJ6C1pj/zjpj3/CpKel2fc931TFLlcVEBoA3dMW\nU4J6uzWcJrshtWSLJrE6GXmtTwKBgQC8S9D8hLYFJU4h7jsDCYHiCLv3gkqixJ5q\nDtiCpmjZhbRTxf5Q0uS7SrFb6e1SPfGdA0gQJvnLDJp+ZGKqk4vm7ojm3NBnih/X\nu2Ar/oZ/ML0Tmo+Yj2NRj+ZM+DEyDxt0//R2DdeIxmB1wiOzeEZnXknkKORVvi8N\n4h/1T+eTrwKBgCcHcm5+YA6T8gKUUs1XIK9qYSITChAhDQvRM4w7uEiyxTOeFzGT\nRSfcYims6MBy+1pMf/+EFPj8OSujdGdmx+4Llwx07si2k/DbkumzHtu3qzqi/RwD\nXZcbV7BKH2aNDtidfn3Ug2st2CqFs7LW8Tb32kmLCEsvPLiaIbjzJsa1AoGBAKkJ\nnxmywf0omlXXml6FoHYcxTHTY9FvlY88uJ3BaossftBeBIrmaLTCvyn2fTjBpy//\njCgD9WeVbvRchj7/qi6soXYvcWAiHaf77MBSBMgWJwd8T8DzqIPGHUen3/JCobGN\nPhblIkMFY/8TRB2PshSGDuum0iUvUOqzv2DoVMq9AoGBAK9wl9glXkFpY0TG64qd\nUHjVNhKt3oktlGiauO6aP2QSkNTogbA+7YwokrlD/4eivJe7qhLFmVDskn3WsnGJ\n5ijUR2xs4GNH8nYBqzlZTHD3lfxh1xLMhetkA5xOe7m3i4mnghPHBEO581ya6+lq\n7HLpN/vaOi5HQ4MtyXkwEDR8\n-----END PRIVATE KEY-----\n",
-#           "client_email": "gke-admin@gke-nth.iam.gserviceaccount.com",
-#           "client_id": "100756032526725754263",
-#           "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-#           "token_uri": "https://oauth2.googleapis.com/token",
-#           "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-#           "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/gke-admin%40gke-nth.iam.gserviceaccount.com",
-#           "universe_domain": "googleapis.com"
-#         }
-
 # Images
 images:
   airflow:
@@ -577,7 +558,7 @@ workers:
 
     # Annotations to add to worker kubernetes service account.
     annotations:
-      iam.gke.io/gcp-service-account: "gke-admin@gke-nth.iam.gserviceaccount.com"
+      iam.gke.io/gcp-service-account: "gke-nth-1@gke-nth-1.iam.gserviceaccount.com"
 
   # Allow KEDA autoscaling.
   keda:
@@ -652,7 +633,7 @@ workers:
     #   whenDeleted: Delete
     #   whenScaled: Delete
     # Volume size for worker StatefulSet
-    size: 50Gi
+    size: 10Gi
     # If using a custom storageClass, pass name ref to all statefulSets here
     storageClassName:
     # Execute init container to chown log directory.
@@ -915,7 +896,7 @@ scheduler:
 
     # Annotations to add to scheduler kubernetes service account.
     annotations:
-      iam.gke.io/gcp-service-account: "gke-admin@gke-nth.iam.gserviceaccount.com"
+      iam.gke.io/gcp-service-account: "gke-nth-1@gke-nth-1.iam.gserviceaccount.com"
 
   # Scheduler pod disruption budget
   podDisruptionBudget:
@@ -1400,7 +1381,7 @@ webserver:
 
     # Annotations to add to webserver kubernetes service account.
     annotations:
-      iam.gke.io/gcp-service-account: gke-admin@gke-nth.iam.gserviceaccount.com
+      iam.gke.io/gcp-service-account: gke-nth-1@gke-nth-1.iam.gserviceaccount.com
 
   # Webserver pod disruption budget
   podDisruptionBudget:
@@ -1637,7 +1618,7 @@ triggerer:
     # This policy determines whether PVCs should be deleted when StatefulSet is scaled down or removed.
     persistentVolumeClaimRetentionPolicy: ~
     # Volume size for triggerer StatefulSet
-    size: 50Gi
+    size: 10Gi
     # If using a custom storageClass, pass name ref to all statefulSets here
     storageClassName:
     # Execute init container to chown log directory.
@@ -2814,7 +2795,7 @@ logs:
     # Enable persistent volume for storing logs
     enabled: false
     # Volume size for logs
-    size: 100Gi
+    size: 10Gi
     # Annotations for the logs PVC
     annotations: {}
     # If using a custom storageClass, pass name here

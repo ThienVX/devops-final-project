@@ -1,12 +1,9 @@
 dependencies:
-- name: ingress-nginx
-  repository: https://kubernetes.github.io/ingress-nginx
-  version: 4.11.2
 - name: upload-files-app
   repository: file://subcharts/upload_files_app
   version: 0.1.0
 - name: upload-files-be
   repository: file://subcharts/upload-files-be
   version: 0.1.0
-digest: sha256:1328050f464120bad0c5cffc4c48df6e155d8230f739895873b6b9e332f88777
-generated: "2024-12-24T22:48:19.1212474+07:00"
+digest: sha256:9191796bd09e7743ddad5bebebfc101623cf534b871a129da5c816b0cdcbec02
+generated: "2024-12-25T12:08:17.6162555+07:00"
