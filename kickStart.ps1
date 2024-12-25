@@ -19,15 +19,18 @@ param (
     [string]$AirflowModifiedValuesPath = "D:\Learning\DataPlatform\data-source-3\final_devops_project\src\helm\helm_final\airflow\values-airflow-modified.yaml",
     [string]$AirflowReleaseName = "airflow",
     [string]$airflowNamespace = "data-process",
+    [string]$airflowRepoPath = "apache-airflow/airflow",
 
-    [string]$DataStorageChartPath = "D:\Learning\DataPlatform\data-source-3\final_devops_project\src\helm\helm_final\data-storage\values-postgresql.yaml",
+    [string]$PostgresqlValuesFilePath = "D:\Learning\DataPlatform\data-source-3\final_devops_project\src\helm\helm_final\data-storage\values-postgresql.yaml",
     [string]$PostgresqlReleaseName = "data-storage",
     [string]$PostgresqlNamespace = "data-storage",
+    [string]$PostgresqlRepoPath = "bitnami/postgresql",
 
     [string]$jupyterFileValuesPath = "D:\Learning\DataPlatform\data-source-3\final_devops_project\src\helm\helm_final\data-query\values-jupyterhub.yaml",
     [string]$jupyterModifiedValuesPath = "D:\Learning\DataPlatform\data-source-3\final_devops_project\src\helm\helm_final\data-query\values-jupyterhub-modified.yaml",
     [string]$JupyterReleaseName = "jupyter",
-    [string]$JupyterNamespace = "data-query"
+    [string]$JupyterNamespace = "data-query",
+    [string]$jupyterRepoPath = "jupyterhub/jupyterhub"
 )
 
 # Enable Logging
@@ -290,7 +293,7 @@ if ($existingAirflow) {
 
         # Proceed with installation after uninstall
         Write-Host "Installing new Airflow release..." -ForegroundColor Cyan
-        $helmInstallResult = helm install $AirflowReleaseName $AirflowChartPath -f $AirflowValuesFilePath --namespace $AirflowNamespace
+        $helmInstallResult = helm install $AirflowReleaseName $airflowRepoPath --namespace $AirflowNamespace -f $AirflowModifiedValuesPath
 
         if ($helmInstallResult -match "Error") {
             Write-Host "Helm install failed: $helmInstallResult" -ForegroundColor Red
@@ -304,7 +307,7 @@ if ($existingAirflow) {
 } else {
     # Install Airflow if not already installed
     Write-Host "Airflow is not installed. Installing new release..." -ForegroundColor Cyan
-    $helmInstallResult = helm install $AirflowReleaseName $AirflowChartPath -f $AirflowValuesFilePath --namespace $AirflowNamespace
+    $helmInstallResult = helm install $AirflowReleaseName $airflowRepoPath --namespace $AirflowNamespace -f $AirflowModifiedValuesPath
 
     if ($helmInstallResult -match "Error") {
         Write-Host "Helm install failed: $helmInstallResult" -ForegroundColor Red
@@ -334,7 +337,7 @@ if ($existingJupyter) {
 
         # Proceed with installation after uninstall
         Write-Host "Installing new Jupyter release..." -ForegroundColor Cyan
-        $helmInstallResult = helm install $JupyterReleaseName jupyterhub/jupyterhub --namespace $JupyterNamespace --version 4.0.1-0.dev.git.6889.h262097b2 -f $jupyterModifiedValuesPath
+        $helmInstallResult = helm install $JupyterReleaseName $jupyterRepoPath --namespace $JupyterNamespace --version 4.0.1-0.dev.git.6889.h262097b2 -f $jupyterModifiedValuesPath
 
         if ($helmInstallResult -match "Error") {
             Write-Host "Helm install failed: $helmInstallResult" -ForegroundColor Red
@@ -348,7 +351,7 @@ if ($existingJupyter) {
 } else {
     # Install Jupyter if not already installed
     Write-Host "Jupyter is not installed. Installing new release..." -ForegroundColor Cyan
-    $helmInstallResult = helm install $JupyterReleaseName jupyterhub/jupyterhub --namespace $JupyterNamespace --version 4.0.1-0.dev.git.6889.h262097b2 -f $jupyterModifiedValuesPath
+    $helmInstallResult = helm install $JupyterReleaseName $jupyterRepoPath --namespace $JupyterNamespace --version 4.0.1-0.dev.git.6889.h262097b2 -f $jupyterModifiedValuesPath
 
     if ($helmInstallResult -match "Error") {
         Write-Host "Helm install failed: $helmInstallResult" -ForegroundColor Red
@@ -378,7 +381,7 @@ if ($existingPostgresql) {
 
         # Proceed with installation after uninstall
         Write-Host "Installing new PostgreSQL release..." -ForegroundColor Cyan
-        $helmInstallResult = helm install $PostgresqlReleaseName $PostgresqlChartPath -f $PostgresqlValuesFilePath --namespace $PostgresqlNamespace
+        $helmInstallResult = helm install $PostgresqlReleaseName $PostgresqlRepoPath --version 16.3.4 --namespace $PostgresqlNamespace -f $PostgresqlValuesFilePath
 
         if ($helmInstallResult -match "Error") {
             Write-Host "Helm install failed: $helmInstallResult" -ForegroundColor Red
@@ -392,7 +395,7 @@ if ($existingPostgresql) {
 } else {
     # Install PostgreSQL if not already installed
     Write-Host "PostgreSQL is not installed. Installing new release..." -ForegroundColor Cyan
-    $helmInstallResult = helm install $PostgresqlReleaseName $PostgresqlChartPath -f $PostgresqlValuesFilePath --namespace $PostgresqlNamespace
+    $helmInstallResult = helm install $PostgresqlReleaseName $PostgresqlRepoPath --version 16.3.4 --namespace $PostgresqlNamespace -f $PostgresqlValuesFilePath
 
     if ($helmInstallResult -match "Error") {
         Write-Host "Helm install failed: $helmInstallResult" -ForegroundColor Red
