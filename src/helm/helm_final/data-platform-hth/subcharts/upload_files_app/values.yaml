@@ -139,7 +139,7 @@ image:
 port: 80
 env:
   - name: VITE_BACK_END_URL
-    value: "http://upload-file-be.34.124.182.21.nip.io"
+    value: "http://upload-file-be.34.97.10.19.nip.io"
 service:
   name: upload-files-app
   type: ClusterIP

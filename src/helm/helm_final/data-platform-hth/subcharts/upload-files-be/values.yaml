@@ -141,7 +141,7 @@ env:
   - name: SPRING_DIRECTOR_NAME
     value: demo
   - name: GOOGLE_APPLICATION_CREDENTIALS
-    value: /var/secrets/google/valiant-hexagon-443709-r2-361570097b8d.json
+    value: /var/secrets/google/gke-nth-1-933de76d9c63.json
 volumes:
   - name: google-cloud-keys
     secret:

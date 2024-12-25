@@ -2,7 +2,7 @@
 [CmdletBinding()]
 param (
     [ValidateScript({ Test-Path $_ })]
-    [string]$KeyPath = "D:\Learning\DataPlatform\data-source-3\final_devops_project\gke-nth-1-933de76d9c63",
+    [string]$KeyPath = "D:\Learning\DataPlatform\data-source-3\final_devops_project\gke-nth-1-933de76d9c63.json",
     [string]$projectId = "gke-nth-1",
 
     [string]$IngressNginxValuesFilePath = "D:\Learning\DataPlatform\data-source-3\final_devops_project\src\helm\helm_final\ingress-nginx\values-ingress-nginx.yaml",
@@ -412,71 +412,6 @@ try {
     Write-Host "Error adding IAM policy bindings: $_" -ForegroundColor Red
     exit 1
 }
-
-# Step 8
-#$AirflowDomain = "http://airflow.$LoadBalancerIP.nip.io"
-#Write-Host "Constructed Airflow Domain: $AirflowDomain" -ForegroundColor Green
-
-# Define username and password
-$username = "admin"
-$password = "admin"
-
-# Combine username and password into a plain string
-#$plainCredentials = "$username:$password"
-
-#Write-Host "Basic Credentials: $plainCredentials"
-
-# Ensure the credentials are properly encoded in Base64 for Basic Authentication
-$base64AuthInfo = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes("${username}:${password}"))
-
-# Output the Base64 encoded string (for debugging)
-#Write-Host "Encoded Credentials: $base64AuthInfo"
-
-
-# Set the Authorization header
-$Headers = @{
-"Authorization" = "Basic $base64AuthInfo"
-}
-
-# Maximum number of retries
-$maxRetries = 10
-# Wait time between retries (in seconds)
-$waitTime = 59
-# Retry counter
-$retryCount = 0
-# Flag to track if the domain is ready
-$isDomainReady = $false
-
-## Retry logic for domain readiness
-#while ($retryCount -lt $maxRetries -and -not $isDomainReady) {
-#    $retryCount++
-#    Write-Host "Attempt {$retryCount}: Checking Airflow domain readiness..." -ForegroundColor Yellow
-#
-#    if (Check-DomainReadiness -Url $AirflowDomain) {
-#        $isDomainReady = $true
-#        Write-Host "Airflow domain is ready." -ForegroundColor Green
-#        break
-#    } else {
-#        Write-Host "Airflow domain is not ready. Retrying in $waitTime seconds..." -ForegroundColor Red
-#        Start-Sleep -Seconds $waitTime
-#    }
-#}
-#
-## If the domain is ready, register the connection
-#if ($isDomainReady) {
-#    $AirflowApiUrl = "$AirflowDomain/api/v1/connections"
-#    Register-AirflowConnection -AirflowApiUrl $AirflowApiUrl `
-#      -ConnectionId "google_cloud_default" `
-#      -ConnectionType "google_cloud_platform" `
-#      -Description "Google Cloud Default Connection with Anonymous Authentication" `
-#      -Extra '{"project_id": "gke-nth-1"}' `
-#      -Headers $Headers
-#
-#} else {
-#    Write-Host "Airflow domain is not ready after $maxRetries attempts. Skipping connection registration." -ForegroundColor Red
-#}
-
-#Write-Host "`nSetup complete! Check '$LogFile' for detailed logs.`n" -ForegroundColor Green
 
 # End Logging
 Stop-Transcript
