@@ -21,7 +21,13 @@ param (
     [string]$airflowNamespace = "data-process",
 
     [string]$DataStorageChartPath = "D:\Learning\DataPlatform\data-source-3\final_devops_project\src\helm\helm_final\data-storage\values-postgresql.yaml",
-    [string]$DataStorageReleaseName = "data-storage"
+    [string]$PostgresqlReleaseName = "data-storage",
+    [string]$PostgresqlNamespace = "data-storage",
+
+    [string]$jupyterFileValuesPath = "D:\Learning\DataPlatform\data-source-3\final_devops_project\src\helm\helm_final\data-query\values-jupyterhub.yaml",
+    [string]$jupyterModifiedValuesPath = "D:\Learning\DataPlatform\data-source-3\final_devops_project\src\helm\helm_final\data-query\values-jupyterhub-modified.yaml",
+    [string]$JupyterReleaseName = "jupyter",
+    [string]$JupyterNamespace = "data-query"
 )
 
 # Enable Logging
@@ -88,7 +94,7 @@ function Get-LoadBalancerIP {
 # Function to Replace LoadBalancerIP in airflow-values.yaml
 # Function to Replace LoadBalancerIP in airflow-values.yaml and display changes
 # Function to Replace LoadBalancerIP in airflow-values.yaml and display changes
-function Update-AirflowValues {
+function replace_loadbalancer_ip {
     param (
         [string]$FilePath,
         [string]$LoadBalancerIP
@@ -261,35 +267,142 @@ $LoadBalancerIP = Get-LoadBalancerIP -ServiceName "ingress-nginx-controller" -Na
 Write-Host "LoadBalancer IP fetched: $LoadBalancerIP" -ForegroundColor Green
 
 # Update airflow-values.yaml with LoadBalancer IP
-$AirflowModifiedValuesPath = Update-AirflowValues -FilePath $AirflowChartPath -LoadBalancerIP $LoadBalancerIP
+$AirflowModifiedValuesPath = replace_loadbalancer_ip -FilePath $AirflowChartPath -LoadBalancerIP $LoadBalancerIP
+$jupyterModifiedValuesPath = replace_loadbalancer_ip -FilePath $jupyterFileValuesPath -LoadBalancerIP $LoadBalancerIP
 
 # Step 4: Deploy Airflow Chart
-Write-Host "Deploying Airflow chart with updated values..." -ForegroundColor Cyan
-helm uninstall $AirflowReleaseName -n data-process 2>&1 | Out-Null
+# Check if Airflow release already exists
+kubectl create namespace $AirflowNamespace
+$existingAirflow = helm list --namespace $AirflowNamespace | Select-String -Pattern $AirflowReleaseName
 
-# Capture any error output from helm install for Airflow
-Write-Host "Using modified Airflow values file: $AirflowModifiedValuesPath" -ForegroundColor Cyan
-kubectl create namespace data-process
-$airflowInstallResult = helm install $AirflowReleaseName apache-airflow/airflow --version 1.15.0 -f $AirflowModifiedValuesPath -n data-process  2>&1
-if ($airflowInstallResult -match "Error") {
-    Write-Host "Airflow Helm install failed: $airflowInstallResult" -ForegroundColor Red
-    exit 1
+if ($existingAirflow) {
+    # Ask the user if they want to uninstall the existing release
+    $userInput = Read-Host "Airflow release '$AirflowReleaseName' already exists. Do you want to uninstall it? (Y/N) [Default: N]"
+
+    if ([string]::IsNullOrWhiteSpace($userInput)) {
+        $userInput = 'N'
+    }
+
+    if ($userInput -eq 'Y' -or $userInput -eq 'y') {
+        # Uninstall existing Airflow release
+        Write-Host "Uninstalling existing Airflow release..." -ForegroundColor Yellow
+        helm uninstall $AirflowReleaseName --namespace $AirflowNamespace
+
+        # Proceed with installation after uninstall
+        Write-Host "Installing new Airflow release..." -ForegroundColor Cyan
+        $helmInstallResult = helm install $AirflowReleaseName $AirflowChartPath -f $AirflowValuesFilePath --namespace $AirflowNamespace
+
+        if ($helmInstallResult -match "Error") {
+            Write-Host "Helm install failed: $helmInstallResult" -ForegroundColor Red
+            exit 1
+        }
+        Write-Host "Airflow release '$AirflowReleaseName' deployed successfully!" -ForegroundColor Green
+    } else {
+        Write-Host "Skipping uninstallation and installation of Airflow." -ForegroundColor Yellow
+        Write-Host "Airflow release '$AirflowReleaseName' remains unchanged." -ForegroundColor Green
+    }
+} else {
+    # Install Airflow if not already installed
+    Write-Host "Airflow is not installed. Installing new release..." -ForegroundColor Cyan
+    $helmInstallResult = helm install $AirflowReleaseName $AirflowChartPath -f $AirflowValuesFilePath --namespace $AirflowNamespace
+
+    if ($helmInstallResult -match "Error") {
+        Write-Host "Helm install failed: $helmInstallResult" -ForegroundColor Red
+        exit 1
+    }
+    Write-Host "Airflow release '$AirflowReleaseName' deployed successfully!" -ForegroundColor Green
 }
-Write-Host "Airflow chart deployed successfully!" -ForegroundColor Green
 
-# Step 5: Deploy Postgresql Chart
-Write-Host "Deploying Postgresql chart with values..." -ForegroundColor Cyan
-kubectl create namespace data-storage
-helm uninstall $DataStorageReleaseName -n data-storage
-$postgresqlInstallResult = helm install $DataStorageReleaseName apache-airflow/airflow --version 1.15.0 -f $DataStorageChartPath -n data-storage  2>&1
-if ($postgresqlInstallResult -match "Error") {
-    Write-Host "Postgresql Helm install failed: $airflowInstallResult" -ForegroundColor Red
-    exit 1
+
+# Step 5: Deploy Jupyter Chart
+# Check if Jupyter release already exists
+kubectl create namespace $JupyterNamespace
+$existingJupyter = helm list --namespace $JupyterNamespace | Select-String -Pattern $JupyterReleaseName
+
+if ($existingJupyter) {
+    # Ask the user if they want to uninstall the existing release
+    $userInput = Read-Host "Jupyter release '$JupyterReleaseName' already exists. Do you want to uninstall it? (Y/N) [Default: N]"
+
+    if ([string]::IsNullOrWhiteSpace($userInput)) {
+        $userInput = 'N'
+    }
+
+    if ($userInput -eq 'Y' -or $userInput -eq 'y') {
+        # Uninstall existing Jupyter release
+        Write-Host "Uninstalling existing Jupyter release..." -ForegroundColor Yellow
+        helm uninstall $JupyterReleaseName --namespace $JupyterNamespace
+
+        # Proceed with installation after uninstall
+        Write-Host "Installing new Jupyter release..." -ForegroundColor Cyan
+        $helmInstallResult = helm install $JupyterReleaseName jupyterhub/jupyterhub --namespace $JupyterNamespace --version 4.0.1-0.dev.git.6889.h262097b2 -f $jupyterModifiedValuesPath
+
+        if ($helmInstallResult -match "Error") {
+            Write-Host "Helm install failed: $helmInstallResult" -ForegroundColor Red
+            exit 1
+        }
+        Write-Host "Jupyter release '$JupyterReleaseName' deployed successfully!" -ForegroundColor Green
+    } else {
+        Write-Host "Skipping uninstallation and installation of Jupyter." -ForegroundColor Yellow
+        Write-Host "Jupyter release '$JupyterReleaseName' remains unchanged." -ForegroundColor Green
+    }
+} else {
+    # Install Jupyter if not already installed
+    Write-Host "Jupyter is not installed. Installing new release..." -ForegroundColor Cyan
+    $helmInstallResult = helm install $JupyterReleaseName jupyterhub/jupyterhub --namespace $JupyterNamespace --version 4.0.1-0.dev.git.6889.h262097b2 -f $jupyterModifiedValuesPath
+
+    if ($helmInstallResult -match "Error") {
+        Write-Host "Helm install failed: $helmInstallResult" -ForegroundColor Red
+        exit 1
+    }
+    Write-Host "Jupyter release '$JupyterReleaseName' deployed successfully!" -ForegroundColor Green
 }
-Write-Host "Postgresql chart deployed successfully!" -ForegroundColor Green
 
 
-# Step 6: Add IAM Policy Bindings
+# Step 6: Deploy Postgresql Chart
+# Check if PostgreSQL release already exists
+kubectl create namespace $PostgresqlNamespace
+$existingPostgresql = helm list --namespace $PostgresqlNamespace | Select-String -Pattern $PostgresqlReleaseName
+
+if ($existingPostgresql) {
+    # Ask the user if they want to uninstall the existing release
+    $userInput = Read-Host "PostgreSQL release '$PostgresqlReleaseName' already exists. Do you want to uninstall it? (Y/N) [Default: N]"
+
+    if ([string]::IsNullOrWhiteSpace($userInput)) {
+        $userInput = 'N'
+    }
+
+    if ($userInput -eq 'Y' -or $userInput -eq 'y') {
+        # Uninstall existing PostgreSQL release
+        Write-Host "Uninstalling existing PostgreSQL release..." -ForegroundColor Yellow
+        helm uninstall $PostgresqlReleaseName --namespace $PostgresqlNamespace
+
+        # Proceed with installation after uninstall
+        Write-Host "Installing new PostgreSQL release..." -ForegroundColor Cyan
+        $helmInstallResult = helm install $PostgresqlReleaseName $PostgresqlChartPath -f $PostgresqlValuesFilePath --namespace $PostgresqlNamespace
+
+        if ($helmInstallResult -match "Error") {
+            Write-Host "Helm install failed: $helmInstallResult" -ForegroundColor Red
+            exit 1
+        }
+        Write-Host "PostgreSQL release '$PostgresqlReleaseName' deployed successfully!" -ForegroundColor Green
+    } else {
+        Write-Host "Skipping uninstallation and installation of PostgreSQL." -ForegroundColor Yellow
+        Write-Host "PostgreSQL release '$PostgresqlReleaseName' remains unchanged." -ForegroundColor Green
+    }
+} else {
+    # Install PostgreSQL if not already installed
+    Write-Host "PostgreSQL is not installed. Installing new release..." -ForegroundColor Cyan
+    $helmInstallResult = helm install $PostgresqlReleaseName $PostgresqlChartPath -f $PostgresqlValuesFilePath --namespace $PostgresqlNamespace
+
+    if ($helmInstallResult -match "Error") {
+        Write-Host "Helm install failed: $helmInstallResult" -ForegroundColor Red
+        exit 1
+    }
+    Write-Host "PostgreSQL release '$PostgresqlReleaseName' deployed successfully!" -ForegroundColor Green
+}
+
+
+# Step 7: Add IAM Policy Bindings
 Write-Host "Adding IAM policy bindings for GCP service account..." -ForegroundColor Cyan
 try {
     kubectl annotate serviceaccount airflow-worker --namespace $airflowNamespace iam.gke.io/gcp-service-account=$GcpServiceAccount
@@ -301,7 +414,7 @@ try {
     exit 1
 }
 
-# Step 7
+# Step 8
 $AirflowDomain = "http://airflow.$LoadBalancerIP.nip.io"
 Write-Host "Constructed Airflow Domain: $AirflowDomain" -ForegroundColor Green
 
