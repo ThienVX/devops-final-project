@@ -69,7 +69,7 @@ ingress:
     nginx.ingress.kubernetes.io/use-regex: "true"
     nginx.ingress.kubernetes.io/enable-cors: "true"
   hosts:
-    - host: upload-file-app.34.97.10.19.nip.io
+    - host: upload-file-app.34.146.136.140.nip.io
       paths:
         - path: /
           pathType: ImplementationSpecific
@@ -139,7 +139,7 @@ image:
 port: 80
 env:
   - name: VITE_BACK_END_URL
-    value: "http://upload-file-be.34.97.10.19.nip.io"
+    value: "http://upload-file-be.34.146.136.140.nip.io"
 service:
   name: upload-files-app
   type: ClusterIP

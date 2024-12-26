@@ -558,7 +558,7 @@ workers:
 
     # Annotations to add to worker kubernetes service account.
     annotations:
-      iam.gke.io/gcp-service-account: "gke-nth-1@gke-nth-1.iam.gserviceaccount.com"
+      iam.gke.io/gcp-service-account: "gke-service-account@amazing-math-407308.iam.gserviceaccount.com"
 
   # Allow KEDA autoscaling.
   keda:
@@ -896,7 +896,7 @@ scheduler:
 
     # Annotations to add to scheduler kubernetes service account.
     annotations:
-      iam.gke.io/gcp-service-account: "gke-nth-1@gke-nth-1.iam.gserviceaccount.com"
+      iam.gke.io/gcp-service-account: "gke-service-account@amazing-math-407308.iam.gserviceaccount.com"
 
   # Scheduler pod disruption budget
   podDisruptionBudget:
@@ -1381,7 +1381,7 @@ webserver:
 
     # Annotations to add to webserver kubernetes service account.
     annotations:
-      iam.gke.io/gcp-service-account: gke-nth-1@gke-nth-1.iam.gserviceaccount.com
+      iam.gke.io/gcp-service-account: gke-service-account@amazing-math-407308.iam.gserviceaccount.com
 
   # Webserver pod disruption budget
   podDisruptionBudget:

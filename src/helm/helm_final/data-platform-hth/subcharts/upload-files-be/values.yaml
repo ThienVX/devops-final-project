@@ -70,7 +70,7 @@ ingress:
     nginx.ingress.kubernetes.io/enable-cors: "true"
     nginx.ingress.kubernetes.io/proxy-body-size: "4096m"
   hosts:
-    - host: upload-file-be.34.97.10.19.nip.io
+    - host: upload-file-be.34.146.136.140.nip.io
       paths:
         - path: /
           pathType: ImplementationSpecific
@@ -135,13 +135,13 @@ affinity: {}
 port: 8080
 env:
   - name: SPRING_PROJECT_ID
-    value: gke-nth-1
+    value: amazing-math-407308
   - name: SPRING_BUCKET_ID
-    value: gcp-bucket-demo-6eaa8a4f
+    value: gcp-bucket-demo-6eaa8a4b
   - name: SPRING_DIRECTOR_NAME
     value: demo
   - name: GOOGLE_APPLICATION_CREDENTIALS
-    value: /var/secrets/google/gke-nth-1-933de76d9c63.json
+    value: /var/secrets/google/amazing-math-407308-d9324893b277.json
 volumes:
   - name: google-cloud-keys
     secret:
