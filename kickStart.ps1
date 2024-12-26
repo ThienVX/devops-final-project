@@ -2,32 +2,32 @@
 [CmdletBinding()]
 param (
     [ValidateScript({ Test-Path $_ })]
-    [string]$KeyPath = "D:\Learning\DataPlatform\data-source-3\final_devops_project\gke-nth-1-933de76d9c63.json",
-    [string]$projectId = "gke-nth-1",
+    [string]$KeyPath = "amazing-math-407308-d9324893b277.json",
+    [string]$projectId = "amazing-math-407308",
 
-    [string]$IngressNginxValuesFilePath = "D:\Learning\DataPlatform\data-source-3\final_devops_project\src\helm\helm_final\ingress-nginx\values-ingress-nginx.yaml",
+    [string]$IngressNginxValuesFilePath = "src\helm\helm_final\ingress-nginx\values-ingress-nginx.yaml",
     [string]$IngressNginxReleaseName = "ingress-nginx",
 
     [ValidateScript({ Test-Path $_ })]
-    [string]$HelmChartPath = "D:\Learning\DataPlatform\data-source-3\final_devops_project\src\helm\helm_final\data-platform-hth",
-    [string]$HelmChartValueFilePath = "D:\Learning\DataPlatform\data-source-3\final_devops_project\src\helm\helm_final\data-platform-hth\values.yaml",
+    [string]$HelmChartPath = "src\helm\helm_final\data-platform-hth",
+    [string]$HelmChartValueFilePath = "src\helm\helm_final\data-platform-hth\values.yaml",
 
     [string]$ReleaseName = "data-platform-hth",
-    [string]$GcpServiceAccount = "gke-nth-1@gke-nth-1.iam.gserviceaccount.com",
+    [string]$GcpServiceAccount = "gke-service-account@amazing-math-407308.iam.gserviceaccount.com",
 
-    [string]$AirflowChartPath = "D:\Learning\DataPlatform\data-source-3\final_devops_project\src\helm\helm_final\airflow\values-airflow.yaml",
-    [string]$AirflowModifiedValuesPath = "D:\Learning\DataPlatform\data-source-3\final_devops_project\src\helm\helm_final\airflow\values-airflow-modified.yaml",
+    [string]$AirflowChartPath = "src\helm\helm_final\airflow\values-airflow.yaml",
+    [string]$AirflowModifiedValuesPath = "src\helm\helm_final\airflow\values-airflow-modified.yaml",
     [string]$AirflowReleaseName = "airflow",
     [string]$airflowNamespace = "data-process",
     [string]$airflowRepoPath = "apache-airflow/airflow",
 
-    [string]$PostgresqlValuesFilePath = "D:\Learning\DataPlatform\data-source-3\final_devops_project\src\helm\helm_final\data-storage\values-postgresql.yaml",
+    [string]$PostgresqlValuesFilePath = "src\helm\helm_final\data-storage\values-postgresql.yaml",
     [string]$PostgresqlReleaseName = "data-storage",
     [string]$PostgresqlNamespace = "data-storage",
     [string]$PostgresqlRepoPath = "bitnami/postgresql",
 
-    [string]$jupyterFileValuesPath = "D:\Learning\DataPlatform\data-source-3\final_devops_project\src\helm\helm_final\data-query\values-jupyterhub.yaml",
-    [string]$jupyterModifiedValuesPath = "D:\Learning\DataPlatform\data-source-3\final_devops_project\src\helm\helm_final\data-query\values-jupyterhub-modified.yaml",
+    [string]$jupyterFileValuesPath = "src\helm\helm_final\data-query\values-jupyterhub.yaml",
+    [string]$jupyterModifiedValuesPath = "src\helm\helm_final\data-query\values-jupyterhub-modified.yaml",
     [string]$JupyterReleaseName = "jupyter",
     [string]$JupyterNamespace = "data-query",
     [string]$jupyterRepoPath = "jupyterhub/jupyterhub"
