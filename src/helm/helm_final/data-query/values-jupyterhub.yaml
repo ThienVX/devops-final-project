@@ -387,14 +387,21 @@ singleuser:
   networkPolicy:
     enabled: true
     ingress: []
-    egress: []
+    egress:
+      - to:
+          - namespaceSelector:
+              matchLabels:
+                kubernetes.io/metadata.name: data-storage
+        ports:
+          - protocol: TCP
+            port: 5432
     egressAllowRules:
       cloudMetadataServer: false
       dnsPortsCloudMetadataServer: true
       dnsPortsKubeSystemNamespace: true
       dnsPortsPrivateIPs: true
       nonPrivateIPs: true
-      privateIPs: false
+      privateIPs: true
     interNamespaceAccessLabels: ignore
     allowedIngressPorts: []
   events: true
